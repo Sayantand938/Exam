@@ -1,12 +1,12 @@
 const fs = require("fs");
 const path = require("path");
 
-// Get the absolute path of the frontend directory
-const frontendDir = path.resolve(__dirname, "../frontend");
+// Define an absolute path for the static directory
+const staticDir = path.resolve(__dirname, "..", "app", "static");
 
-// Ensure the frontend directory exists
-if (!fs.existsSync(frontendDir)) {
-  fs.mkdirSync(frontendDir, { recursive: true });
+// Ensure the static directory exists
+if (!fs.existsSync(staticDir)) {
+  fs.mkdirSync(staticDir, { recursive: true });
 }
 
 // Function to send a request to Anki-Connect
@@ -40,7 +40,7 @@ async function ankiConnectRequest(action, params = {}) {
 // Function to fetch all note IDs from a specific deck
 async function fetchNoteIdsFromDeck(deckName) {
   try {
-    const query = `deck:"${deckName}"`;
+    const query = `deck:\"${deckName}\"`;
     const noteIds = await ankiConnectRequest("findNotes", { query });
 
     if (!noteIds || noteIds.length === 0) {
@@ -93,10 +93,10 @@ function extractRelevantInfo(notes) {
   }));
 }
 
-// Function to save data to a JSON file
+// Function to save data to a JSON file using absolute path
 function saveToJsonFile(data, fileName) {
   try {
-    const outputPath = path.join(frontendDir, fileName);
+    const outputPath = path.join(staticDir, fileName);
     fs.writeFileSync(outputPath, JSON.stringify(data, null, 2));
     console.log(`Data saved to ${outputPath}`);
   } catch (error) {
